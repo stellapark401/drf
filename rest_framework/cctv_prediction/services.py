@@ -1,5 +1,5 @@
 from entity import Entity
-from common.services import CommonServices
+from rest_framework.common.services import CommonServices
 import pandas as pd
 import numpy as np
 from sklearn import preprocessing
