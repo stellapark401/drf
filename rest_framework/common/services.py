@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 import googlemaps
-from common.abstract import PrinterBase, ReaderBase, ScrapperBase
+from rest_framework.common.abstract import PrinterBase, ReaderBase, ScrapperBase
 from selenium import webdriver
 
 

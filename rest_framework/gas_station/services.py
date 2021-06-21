@@ -1,6 +1,6 @@
 import pandas as pd
 
-from common.services import CommonServices, Scrapper
+from rest_framework.common.services import CommonServices, Scrapper
 from glob import glob
 import re
 
@@ -32,7 +32,7 @@ class Service(CommonServices, Scrapper):
                                  '셀프': station_raw['셀프여부'],
                                  '상표': station_raw['상표']})
         stations['구'] = [i.split()[1] for i in stations['주소']]
-        stations['구'].unique()
+        # stations['구'].unique()
         '''
         for i, district in enumerate(stations['구']):
             if district[-1] != '구':
@@ -41,7 +41,6 @@ class Service(CommonServices, Scrapper):
         482번째 "구"는 특별시
         '''
         stations = stations.drop([stations.index[138], stations.index[481]])
-        svc.dframe(stations)
         '''
         for i, price in enumerate(stations['가격']):
             if str(price).isnumeric():
@@ -53,7 +52,7 @@ class Service(CommonServices, Scrapper):
         251번째 가격은 -
         '''
         stations = stations.drop([stations.index[16], stations.index[238], stations.index[250]])
-
+        svc.dframe(stations)
 
 svc = Service()
 svc.price_info_by_gas_station()
