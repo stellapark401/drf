@@ -43,7 +43,7 @@ class Scrapper(ScrapperBase):
     def chrome_driver(self) -> object:
 
         options = webdriver.ChromeOptions()
-        # options.add_argument('headless')
+        options.add_argument('headless')
         # options.add_experimental_option('useAutomationExtension', False)
         options.add_argument('window-size=1920x1080')
         options.add_argument('--disable-gpu')

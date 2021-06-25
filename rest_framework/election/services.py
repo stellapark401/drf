@@ -67,7 +67,9 @@ class ElectionService(CommonServices, Scrapper):
                                'hong': [],
                                'ahn': []}
         self.wait = WebDriverWait(self.driver, 10)
-        self.sido_names_values = ['서울특별시',
+        self.sido_names_values = [
+                                '▷ 전 체',
+                                '서울특별시',
                                  '부산광역시',
                                  '대구광역시',
                                  '인천광역시',
@@ -124,13 +126,22 @@ class ElectionService(CommonServices, Scrapper):
         # the code right below seems to play a roll
         opt_elements[1].click()
         sido_list_raw = driver.find_element_by_xpath("""//*[@id="cityCode"]""")
-
         opt_elements_by_xpath = sido_list_raw.find_elements_by_tag_name('option')
+        opt_elements_by_xpath[0].click()
         for i in opt_elements_by_xpath:
             print(i.text)
         opt_elements_by_xpath[1].click()
+        opt_elements_by_xpath[1].click()
+        opt_elements_by_xpath[1].click()
+        opt_elements_by_xpath[1].click()
+        opt_elements_by_xpath[1].click()
+        sido_list_raw = driver.find_element_by_xpath("""//*[@id="cityCode"]""")
+        opt_elements_by_xpath = sido_list_raw.find_elements_by_tag_name('option')
+        for i in opt_elements_by_xpath:
+            print(i.text)
 
-        for each_sido in self.sido_names_values:
+        for i, each_sido in enumerate(self.sido_names_values):
+
             element = driver.find_element_by_id("cityCode")
             element.send_keys(each_sido)
             make_xpath = """//*[@id="searchBtn"]"""
@@ -139,11 +150,6 @@ class ElectionService(CommonServices, Scrapper):
             opt_elements_by_xpath = sido_list_raw.find_elements_by_tag_name('option')
             for i in opt_elements_by_xpath:
                 print(i.text)
-            opt_elements_by_xpath[1].click()
-            opt_elements_by_xpath[1].click()
-            opt_elements_by_xpath[1].click()
-            opt_elements_by_xpath[1].click()
-            opt_elements_by_xpath[1].click()
             driver.find_element_by_xpath(make_xpath).click()
 
             html = driver.page_source
@@ -153,6 +159,17 @@ class ElectionService(CommonServices, Scrapper):
             df = pd.read_html(str(table))
 
             self.append_data(df, each_sido)
+
+        temp_keys = list(self.election_result_raw.keys())
+        temp_values = list(self.election_result_raw.values())
+        for i, j in enumerate(temp_values):
+            temp_values[i] = j[17:]
+
+        election_result_trimmed = {}
+        for i, j in enumerate(temp_keys):
+            election_result_trimmed[j] = temp_values[i]
+
+        self.election_result_raw = election_result_trimmed
 
         election_result = pd.DataFrame(self.election_result_raw,
                                        columns=['광역시도', '시군', 'pop', 'moon', 'hong', 'ahn'])
@@ -323,8 +340,10 @@ class ElectionService(CommonServices, Scrapper):
 
 
 es = ElectionService()
-es.get_table()
-# es.get_rate()
+# Build the result table
+# es.get_table()
+# Build the candidates' result comparison data
+es.get_rate()
 # options: 'moon_vs_hong', 'moon_vs_ahn', 'ahn_vs_hong'
-# es.draw_map('moon_vs_hong')
-# es.create_map_html('moon_vs_hong')
+# es.draw_map()
+# es.create_map_html()
