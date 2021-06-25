@@ -41,10 +41,17 @@ class Scrapper(ScrapperBase):
         self.url = ''
 
     def chrome_driver(self) -> object:
-        '''
+
         options = webdriver.ChromeOptions()
-        options.add_argument('headless')
-        options.add_argument('disable-gpu')
+        # options.add_argument('headless')
+        # options.add_experimental_option('useAutomationExtension', False)
+        options.add_argument('window-size=1920x1080')
+        options.add_argument('--disable-gpu')
         options.add_argument('lang=ko_KR')
-        '''
-        return webdriver.Chrome('../common/chromedriver')
+
+        # options.add_argument('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/60.0.3112.50 Safari/537.36')
+
+        options.add_argument("user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) "
+                             "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36")
+
+        return webdriver.Chrome('../common/chromedriver', chrome_options=options)
